@@ -306,12 +306,8 @@ The study compares complete pretrained configurations, not equal-input architect
 
 [10] RT-DETR authors / Hugging Face. Official implementation and evaluated checkpoint configuration. [Source](https://github.com/lyuwenyu/RT-DETR). [Preprocessor](https://huggingface.co/PekingU/rtdetr_r50vd/blob/main/preprocessor_config.json); [Framework docs](https://huggingface.co/docs/transformers/model_doc/rt_detr).
 
-[11] Kaikai Liu. DeepDataMiningLearning/ngdet tutorial; R. Ohlan experiment code, source and results archive. [Source](https://github.com/lkk688/DeepDataMiningLearning/blob/main/DeepDataMiningLearning/ngdet/TUTORIAL.md). [Recorded source](https://github.com/rohan328/CMPE249Assignment1/tree/2e7426314e05b4f960c8befc531ee759625e9b1a); [Results](https://github.com/rohan328/CMPE249Assignment1/tree/3782492ec58c86520db2eeaecc100964730bfdbc/results); [0.25 sweep](https://github.com/rohan328/CMPE249Assignment1/tree/3782492ec58c86520db2eeaecc100964730bfdbc/results_025).
+[11] Kaikai Liu. DeepDataMiningLearning/ngdet tutorial; R. Ohlan experiment code, source and results archive. [Source](https://github.com/lkk688/DeepDataMiningLearning/blob/main/DeepDataMiningLearning/ngdet/TUTORIAL.md). [Recorded source](https://github.com/rohan328/CMPE249Assignment1/tree/8418fc1bae85657190f11749483bf2e729b9702c); [Results](https://github.com/rohan328/CMPE249Assignment1/tree/3782492ec58c86520db2eeaecc100964730bfdbc/results); [0.25 sweep](https://github.com/rohan328/CMPE249Assignment1/tree/3782492ec58c86520db2eeaecc100964730bfdbc/results_025).
 
 [12] Ultralytics. Prediction settings, preprocessing and inference defaults. [Source](https://docs.ultralytics.com/modes/predict/).
 
 [13] COCO maintainers. COCOeval reference implementation and detection metrics. [Source](https://github.com/cocodataset/cocoapi/blob/master/PythonAPI/pycocotools/cocoeval.py).
-
-## AI assistance disclosure
-
-ChatGPT/Codex assisted with analysis and report preparation, including reading the repository, checking JSON-derived values, reproducing the split digest and inspecting archived frames. These checks do not constitute new detector inference. Measured results remain those in the archived experiment artifacts.
