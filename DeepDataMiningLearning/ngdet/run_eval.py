@@ -33,11 +33,11 @@ DEFAULT_OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "outp
 
 # Default dataset roots on this machine; override on the CLI with --roots.
 DEFAULT_ROOTS = {
-    "kitti": "/mnt/e/Shared/Dataset/Kitti/",
-    "waymo": "/mnt/e/Shared/Dataset/waymodata",
-    "nuscenes": "/mnt/e/Shared/Dataset/NuScenes/v1.0-trainval",
-    "nuimages": "/mnt/e/Shared/Dataset/NuScenes/nuimages",
-    "coco": "/mnt/e/Shared/Dataset/coco2017/val2017",
+    "kitti": "datasets/Kitti/",
+    "waymo": "datasets/waymodata",
+    "nuscenes": "datasets/NuScenes/v1.0-trainval",
+    "nuimages": "datasets/NuScenes/nuimages",
+    "coco": "datasets/coco2017/val2017",
     "mixed": os.path.join(DEFAULT_OUT_DIR, "mixed"),
 }
 
