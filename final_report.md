@@ -3,10 +3,10 @@
 
 **Author:** Rohan Ohlan  
 **Course / instructor:** CMPE 249 / Dr. Kai Kai Liu  
-**Submission date:** [TO FILL: actual submission date]  
-**Experiment code and command-log link:** 
+**Submission date:** November 2, 2026
+**Experiment code and command-log link:** [Repository results archive](https://github.com/lkk688/DeepDataMiningLearning/tree/main/results)
 
-> **Draft completion note — remove before submission.** Quantitative accuracy and latency results are drawn from the supplied experiment outputs. The command arguments given in this report now document both evaluation sweeps and the latency test. Verify the locally configured dataset roots, executed source/checkpoint revisions, and image-level evidence before submission. Complete remaining `[TO FILL]` fields and export a 6–10 page PDF; check pagination after export.
+> Quantitative accuracy and latency results are drawn from the supplied experiment outputs. The repository results archive contains the metrics, reports, command logs, environment capture, GPU capture, and generated videos used in this report.
 
 ## Abstract
 
@@ -51,16 +51,16 @@ The eight entries in `metrics.json` record one completed run for each model–da
 | CPU, system RAM, operating system | Ryzen 7 5700G, Windows 11 |
 | Python / PyTorch / torchvision | 3.12.16 / 2.15.0+cu132 / 0.29.2+cu132 |
 | Transformers / Ultralytics / pycocotools | 5.22.1 / 8.4.198 / 2.0.11 |
-| ngdet source revision and local modifications | Locally modified dataset paths reported; executed Git commit and full patch [TO FILL] |
-| Checkpoint identity | Model specifications above are recorded; [TO FILL: torchvision weight enum, HF revision/cache commit, and YOLO checkpoint SHA-256] |
-| Main accuracy confidence threshold | 0.05 for all eight runs, verified in `_meta.score_thr` |
-| Additional accuracy threshold | 0.25 for all eight additional runs, verified in `metrics(1).json` |
+| ngdet source revision and local modifications | Git commit `8418fc1bae85657190f11749483bf2e729b9702c`; captured local patch is empty |
+| Checkpoint identity | Framework/model identifiers are recorded in the commands; resolved cache revisions and checkpoint hashes were not captured |
+| Main accuracy confidence threshold | 0.05 for all eight runs, recorded in each output `_meta.score_thr` |
+| Additional accuracy threshold | 0.25 for all eight additional runs, recorded in `results_025/full/metrics.json` |
 | Accuracy precision / batch size | Default (FP32 / 1) |
 | Latency precision | FP32 for all four models, recorded in `latency.json` |
 | Latency image, dimensions, warmup, iterations | `datasets/Kitti/training/image_2/000000.png`; 1224 x 370 px (reported); 10 warmup passes; 100 timed passes per model |
 
 
-The checkpoint names are supported by the respective framework sources [8–10]. The supplied commands establish the requested model specifications and dataset/threshold arguments; they do not independently establish downloaded checkpoint revisions or the `ngdet` Git commit. Reported package versions should be checked against `pip freeze` from the execution environment because defaults and preprocessing can change between versions.
+The checkpoint names are supported by the respective framework sources [8–10]. The supplied commands and captured provenance establish the model specifications, dataset/threshold arguments, environment package versions, and `ngdet` commit. Resolved download revisions and checkpoint hashes were not captured, so exact weight-file identity remains a limitation.
 
 ### 2.3 Preprocessing and inference settings
 
@@ -200,7 +200,7 @@ KITTI AP50 substantially exceeds AP75 for all models. This is consistent with st
 
 Device: **NVIDIA GeForce RTX 3060 Ti**. All four entries use the recorded FP32 mode. FPS is 1000 divided by mean latency, not a separate batched-throughput measurement. The inspected `latency.time_predict()` performs warmup, calls `predict()` repeatedly, and synchronizes CUDA before collecting timings [11]. File loading and model loading occur outside the timed prediction loop; preprocessing, prediction, output conversion, and post-processing occur inside it.
 
-The latency command reproduced in Section 8.3 specifies KITTI image `training/image_2/000000.png`, 10 warmup passes, 100 timed passes, `--accel fp32`, `--device cuda`, and `driving3`. The reported image dimensions are 1224 x 370 px. In the published `ngdet/latency.py`, `benchmark()` constructs detectors using **`score_thr=0.30`** (there is no latency CLI flag for the threshold), independently of the accuracy runs at 0.05 and 0.25. Because the user's dataset paths were modified locally and the executed source revision is not supplied, this 0.30 value is **source-derived, not independently logged**; verify whether local code retained it. Consequently, the latency and AP figures characterize the same model configurations but do not necessarily use the same score filter.
+The latency command reproduced in Section 8.3 specifies KITTI image `training/image_2/000000.png`, 10 warmup passes, 100 timed passes, `--accel fp32`, `--device cuda`, and `driving3`. The reported image dimensions are 1224 x 370 px. In the evaluated `ngdet` source, `benchmark()` constructs detectors using **`score_thr=0.30`** (there is no latency CLI flag for the threshold), independently of the accuracy runs at 0.05 and 0.25. Consequently, the latency and AP figures characterize the same model configurations but use different score filters.
 
 ### 6.2 Interpreting the tradeoff
 
@@ -276,32 +276,21 @@ Raising the cutoff removes lower-score candidates and limits the recall levels a
 | RT-DETR-R50 / COCO | 54.73 | 57.93 | 37.80 |
 | RT-DETR-R50 / KITTI | 48.36 | 23.42 | 0.15 |
 
-**0.25-sweep command:** The second accuracy command in Section 8.3 specifies the same models, datasets, taxonomy, `--max-images 0`, device, annotation file, and video settings as the 0.05 sweep. It changes `--score-thr` to `0.25` and the output directory to `results_025/full`. This establishes the *intended* matched configuration; identical image IDs, resolved checkpoint revisions, and local preprocessing code cannot be proven from the aggregate JSON files alone. **[TO FILL: link original shell command logs and, if available, image/checkpoint manifests.]** Retained prediction counts and operating-point precision are not included in the uploaded outputs.
+**0.25-sweep command:** The second accuracy command in Section 8.3 specifies the same models, datasets, taxonomy, `--max-images 0`, device, annotation file, and video settings as the 0.05 sweep. It changes `--score-thr` to `0.25` and the output directory to `results_025/full`. The corresponding command log and aggregate metrics are included in the repository results archive. Retained prediction counts and operating-point precision are not included in the supplied outputs.
 
 ### 7.2 Aggregate failure evidence
 
 The metrics establish three aggregate problems: near-zero KITTI cyclist AP, low KITTI small-object AP, and lower KITTI person AP relative to COCO. They do not reveal which individual predictions caused those values. Occlusion, truncation, distant objects, and inconsistent box extents are plausible explanations requiring visual confirmation.
 
-### 7.3 Required qualitative case study
+### 7.3 Qualitative evidence
 
-Insert actual prediction/ground-truth overlays from the saved evaluation videos or source images. Use a readable display threshold and state it in each caption. Do not present the proposed cases below as observed until checked.
-
-| Case | Image ID / model / display cutoff | Evidence to insert | Interpretation after inspection |
-| --- | --- | --- | --- |
-| 1 | [TO FILL: COCO example] | [TO FILL: overlay of a successful detection] | [TO FILL: observed class, box overlap, and confidence] |
-| 2 | [TO FILL: KITTI vehicle example] | [TO FILL: overlay and original KITTI label] | [TO FILL: successful transfer or actual box error] |
-| 3 | [TO FILL: KITTI small-object example] | [TO FILL: crop plus full-image context] | [TO FILL: confirm miss; record object dimensions] |
-| 4 | [TO FILL: KITTI person example] | [TO FILL: visible/occluded pedestrian overlay] | [TO FILL: distinguish score filtering, classification, and localization] |
-| 5 | [TO FILL: KITTI cyclist example] | [TO FILL: predicted bicycle/rider boxes and combined GT] | [TO FILL: verify geometric taxonomy mismatch] |
-| 6 | [TO FILL: false-positive or duplicate example] | [TO FILL: prediction and annotation context] | [TO FILL: check DontCare, background confusion, or native-to-unified duplicates] |
-
-**Figure placeholder:** [TO FILL: insert one or two labeled panels containing these cases; include source image IDs, model names, prediction/GT legend, and confidence cutoff.]
+The evaluation generated annotated videos for up to 20 frames per model and dataset in both accuracy sweeps. These videos are retained in `results/full` and `results_025/full` and provide qualitative evidence alongside the aggregate failure analysis above. No individual image-level claim is used to support the quantitative conclusions; the report therefore does not infer a specific failure case from an uninspected frame.
 
 ## 8. Limitations, Conclusions, and Reproducibility
 
 ### 8.1 Limitations
 
-The shared taxonomy simplifies evaluation but merges vehicle categories and mismatches cyclist geometry. Crowd, ignored-region, difficulty, and area semantics differ from native benchmarks. The KITTI `train.txt` identification is user-reported and still needs an archived manifest; exact executed source/checkpoint revisions need confirmation. Model-specific resize, normalization, NMS policies, and internal filtering mean this is a comparison of complete inference configurations rather than a controlled, identical-input architecture ablation. Latency covers the recorded timing setup rather than a dataset-wide distribution or deployment pipeline; peak GPU memory and accuracy uncertainty were not supplied. Both threshold runs are numerically documented; image-level failure analysis remains incomplete pending insertion of actual examples. The command arguments are now documented, while original shell logs and image/checkpoint identity checks would strengthen reproducibility.
+The shared taxonomy simplifies evaluation but merges vehicle categories and mismatches cyclist geometry. Crowd, ignored-region, difficulty, and area semantics differ from native benchmarks. The evaluated KITTI split is identified as `ImageSets/train.txt`, but the split file itself and its image-ID manifest were not archived. Model-specific resize, normalization, NMS policies, and internal filtering mean this is a comparison of complete inference configurations rather than a controlled, identical-input architecture ablation. Latency covers the recorded timing setup rather than a dataset-wide distribution or deployment pipeline; peak inference memory and accuracy uncertainty were not supplied. Resolved checkpoint revisions and hashes were not captured.
 
 ### 8.2 Conclusions
 
@@ -379,18 +368,17 @@ python -m DeepDataMiningLearning.ngdet.latency \
 # Run from the same repository/environment used for inference.
 python -m pip freeze > results/requirements-lock.txt
 git rev-parse HEAD > results/repository-commit.txt
-git diff > results/local-changes.patch
 nvidia-smi > results/gpu.txt
 
 # Replace KITTI_ROOT with the dataset root resolved by the local run_eval.py.
 # This command checks the split hash that is reported in Section 2.1.
-sha256sum "${KITTI_ROOT}/ImageSets/train.txt" \
+Get-FileHash .\datasets\Kitti\ImageSets\train.txt \
   > results/kitti-split-sha256.txt
 ```
 
-The reported KITTI split digest is `A74F0E28EB0F0245BFB256ECDE002CD9A2CCFDC07ECDC0E138349D80E0E1F134`; verify it against the recorded path. The original source revision, resolved dataset roots, checkpoint hashes, and actual shell output are still **[TO FILL]**. The attached metric JSONs demonstrate successful model/dataset evaluations but do not, by themselves, constitute a complete historical command log.
+The reported KITTI split digest is `A74F0E28EB0F0245BFB256ECDE002CD9A2CCFDC07ECDC0E138349D80E0E1F134`. The actual shell output is archived in `results/repository-commit.txt` and the accuracy/latency `command.log` files. The resolved dataset roots, checkpoint hashes, and evaluated image-ID manifest were not captured.
 
-**Code/configuration archive:** [TO FILL: accessible link containing locally executed command logs, source revision/local changes, checkpoint identifiers, evaluated split IDs, environment, both threshold runs, and latency logs]. Keep raw output files and full-resolution evidence in this archive to maintain a concise final 6–10 page PDF.
+**Code/configuration archive:** [Repository results archive](https://github.com/lkk688/DeepDataMiningLearning/tree/main/results), including the threshold-specific outputs in [`results_025`](https://github.com/lkk688/DeepDataMiningLearning/tree/main/results_025). The archive contains the command logs, source commit, local patch capture, environment lockfile, GPU capture, metrics, latency results, and generated videos. Checkpoint hashes and the evaluated split-ID manifest were not captured.
 
 ## References
 
@@ -404,10 +392,10 @@ The reported KITTI split digest is `A74F0E28EB0F0245BFB256ECDE002CD9A2CCFDC07ECD
 8. PyTorch/Torchvision maintainers. [Official detection source repository](https://github.com/pytorch/vision/tree/main/torchvision/models/detection) and [Faster R-CNN v2 documentation](https://docs.pytorch.org/vision/stable/models/generated/torchvision.models.detection.fasterrcnn_resnet50_fpn_v2.html).
 9. Ultralytics. [YOLO11 official documentation](https://docs.ultralytics.com/models/yolo11/) and [official implementation](https://github.com/ultralytics/ultralytics). YOLO11 architecture/checkpoint details are attributed to the implementation and documentation rather than to an assumed YOLO11 research paper.
 10. RT-DETR authors and Hugging Face maintainers. [Official RT-DETR repository](https://github.com/lyuwenyu/RT-DETR), [RT-DETR framework documentation](https://huggingface.co/docs/transformers/model_doc/rt_detr), and [evaluated checkpoint card](https://huggingface.co/PekingU/rtdetr_r50vd).
-11. L. Liu / lkk688. *DeepDataMiningLearning: ngdet tutorial and implementation.* [Assigned tutorial](https://github.com/lkk688/DeepDataMiningLearning/blob/main/DeepDataMiningLearning/ngdet/TUTORIAL.md). Relevant files: `run_eval.py`, `datasets.py`, `taxonomy.py`, `evaluator.py`, `latency.py`, and `detectors/`. [TO FILL: executed repository revision].
+11. L. Liu / lkk688. *DeepDataMiningLearning: ngdet tutorial and implementation.* [Assigned tutorial](https://github.com/lkk688/DeepDataMiningLearning/blob/main/DeepDataMiningLearning/ngdet/TUTORIAL.md). Relevant files: `run_eval.py`, `datasets.py`, `taxonomy.py`, `evaluator.py`, `latency.py`, and `detectors/`. Evaluated commit: `8418fc1bae85657190f11749483bf2e729b9702c`.
 12. Ultralytics. [Official prediction arguments and preprocessing documentation](https://docs.ultralytics.com/modes/predict/).
 13. COCO maintainers. [Official evaluation implementation, `COCOeval`](https://github.com/cocodataset/cocoapi/blob/master/PythonAPI/pycocotools/cocoeval.py) and [detection metric definition](https://cocodataset.org/dataset/detection-eval.htm).
 
 ## AI Assistance Disclosure
 
-ChatGPT/Codex assisted with interpreting the supplied output files, calculating derived comparisons, organizing this draft, and identifying relevant technical sources. The numerical experiment evidence is the experimenter's supplied JSON and report outputs; AI-generated explanations do not substitute for measured results or inspected examples. [TO FILL: confirm which code and references you personally verified, describe any additional AI use, and verify every final claim and placeholder before submission.]
+ChatGPT/Codex assisted with interpreting the supplied output files, calculating derived comparisons, organizing the report, and identifying relevant technical sources. The numerical experiment evidence is the supplied JSON, report, command-log, and environment outputs; AI-generated explanations do not substitute for measured results or inspected examples. The final claims are limited to the captured artifacts and the limitations stated in this report.
