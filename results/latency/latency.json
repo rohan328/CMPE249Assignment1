@@ -1,0 +1,46 @@
+[
+  {
+    "mean_ms": 67.41922100016382,
+    "p50_ms": 67.16734997462481,
+    "p90_ms": 70.90094000450335,
+    "std_ms": 2.2770675863546352,
+    "fps": 14.832565330257527,
+    "speedup": 1.0,
+    "model": "torchvision:fasterrcnn_resnet50_fpn_v2",
+    "spec": "torchvision:fasterrcnn_resnet50_fpn_v2",
+    "accel": "fp32"
+  },
+  {
+    "mean_ms": 48.115037004463375,
+    "p50_ms": 47.96345002250746,
+    "p90_ms": 51.25956002739258,
+    "std_ms": 2.5107774999747634,
+    "fps": 20.783523452496468,
+    "speedup": 1.0,
+    "model": "torchvision:retinanet_resnet50_fpn_v2",
+    "spec": "torchvision:retinanet_resnet50_fpn_v2",
+    "accel": "fp32"
+  },
+  {
+    "mean_ms": 25.260318998480216,
+    "p50_ms": 24.91264999844134,
+    "p90_ms": 25.898240052629262,
+    "std_ms": 1.7181514753160054,
+    "fps": 39.587781930234726,
+    "speedup": 1.0,
+    "model": "yolo:yolo11m.pt",
+    "spec": "yolo:yolo11m.pt",
+    "accel": "fp32"
+  },
+  {
+    "mean_ms": 63.489136999705806,
+    "p50_ms": 62.52649996895343,
+    "p90_ms": 69.02326000272296,
+    "std_ms": 5.199650826157977,
+    "fps": 15.750725986472832,
+    "speedup": 1.0,
+    "model": "hf_detr:rtdetr_r50vd",
+    "spec": "hf_detr:PekingU/rtdetr_r50vd",
+    "accel": "fp32"
+  }
+]
